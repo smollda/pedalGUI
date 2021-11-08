@@ -11,13 +11,15 @@ def quit():
     tkTop.destroy()
 
 def set_button1_state():
-        global b
-        b += 1
+        if not ser.is_open:
+            varLabel.set("COM port not open!")
+        print ("Port otevřen")
         #varLabel.set("LED ON ")
         ser.write(bytes('H', 'UTF-8'))
         cc=str(ser.readline())
         print(cc[2:][:-5])
         varLabel.set(cc[2:][:-5])
+        #ser.read_until('x')
         
     
 
@@ -40,26 +42,24 @@ def on_select(selection):
         print ("Port otevřen")
     
 
+label3 = tkinter.Label(text = 'GUI to control pedalBoard',font=("Courier", 12,'bold')).pack()
+
 ports = serial.tools.list_ports.comports()
 default = StringVar(tkTop, "Please Select Port")
 OptionMenu(tkTop, default, *ports, command=on_select).pack()
 
-label3 = tkinter.Label(text = 'Building Python GUI to interface an arduino,'
-                      '\n and control an LED',font=("Courier", 12,'bold')).pack()
-tkTop.counter = 0
-b = tkTop.counter
-
-varLabel = tkinter.IntVar()
+varLabel = tkinter.StringVar()
 tkLabel = tkinter.Label(textvariable=varLabel, )
 tkLabel.pack()
 
-varLabel2 = tkinter.IntVar()
+
+varLabel2 = tkinter.StringVar()
 tkLabel2 = tkinter.Label(textvariable=varLabel2, )
 tkLabel2.pack()
 
 button1 = tkinter.IntVar()
 button1state = tkinter.Button(tkTop,
-    text="ON",
+    text="Calibrate pedals",
     command=set_button1_state,
     height = 4,
     fg = "black",
@@ -67,18 +67,18 @@ button1state = tkinter.Button(tkTop,
     bd = 5,
     activebackground='green'
 )
-button1state.pack(side='top', ipadx=10, padx=10, pady=15)
+button1state.pack(side='top', ipadx=40, padx=10, pady=15)
 
 button2 = tkinter.IntVar()
 button2state = tkinter.Button(tkTop,
-    text="OFF",
+    text="Calibrate Fanatec shifter",
     command=set_button2_state,
     height = 4,
     fg = "black",
     width = 8,
     bd = 5
 )
-button2state.pack(side='top', ipadx=10, padx=10, pady=15)
+button2state.pack(side='top', ipadx=40, padx=10, pady=15)
 
 tkButtonQuit = tkinter.Button(
     tkTop,
@@ -90,5 +90,5 @@ tkButtonQuit = tkinter.Button(
     bg = 'yellow',
     bd = 5
 )
-tkButtonQuit.pack(side='top', ipadx=10, padx=10, pady=15)
+tkButtonQuit.pack(side='top', ipadx=40, padx=10, pady=15)
 tkinter.mainloop()
