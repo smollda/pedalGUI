@@ -46,7 +46,11 @@ label3 = tkinter.Label(text = 'GUI to control pedalBoard',font=("Courier", 12,'b
 
 ports = serial.tools.list_ports.comports()
 default = StringVar(tkTop, "Please Select Port")
-OptionMenu(tkTop, default, *ports, command=on_select).pack()
+if not ports:
+     OptionMenu(tkTop, default, 'No port found', command=on_select).pack()
+else:
+    OptionMenu(tkTop, default, *ports, command=on_select).pack()
+
 
 varLabel = tkinter.StringVar()
 tkLabel = tkinter.Label(textvariable=varLabel, )
@@ -58,7 +62,7 @@ tkLabel2 = tkinter.Label(textvariable=varLabel2, )
 tkLabel2.pack()
 
 button1 = tkinter.IntVar()
-button1state = tkinter.Button(tkTop,
+button1state = tkinter.Button(tkTop,    
     text="Calibrate pedals",
     command=set_button1_state,
     height = 4,
