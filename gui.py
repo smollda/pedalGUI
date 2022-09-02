@@ -13,23 +13,24 @@ def quit():
 def set_button1_state():
         if not ser.is_open:
             varLabel.set("COM port not open!")
-        print ("Port otevřen")
         #varLabel.set("LED ON ")
-        ser.write(bytes('H', 'UTF-8'))
+        ser.write(bytes('k', 'UTF-8'))
+
         cc=str(ser.readline())
-        print(cc[2:][:-5])
-        varLabel.set(cc[2:][:-5])
-        #ser.read_until('x')
+        cc2=str(ser.readline())
+        cc3=str(ser.readline())
+        cc4=str(ser.readline())
+        varLabel.set("Calibrating ...")
+        varLabel2.set("Press all 3 pedals multiple times during the next 10 seconds \n (brake pedal to the maximum desired value)")
+        tkTop.update_idletasks()
+        time.sleep(10)
+        varLabel.set(" ")
+        varLabel2.set("Done  \n")
+
         
-    
-
-def set_button2_state():
-        varLabel.set("LED OFF")
-        ser.write(bytes('L', 'UTF-8'))
-
 tkTop = tkinter.Tk()
-tkTop.geometry('300x600')
-tkTop.title("IoT24hours")
+tkTop.geometry('600x300')
+tkTop.title("pedalBoard control")
 
 def on_select(selection):
     # open the port and command it to start the LED blinking here
@@ -42,7 +43,7 @@ def on_select(selection):
         print ("Port otevřen")
     
 
-label3 = tkinter.Label(text = 'GUI to control pedalBoard',font=("Courier", 12,'bold')).pack()
+
 
 ports = serial.tools.list_ports.comports()
 default = StringVar(tkTop, "Please Select Port")
@@ -58,12 +59,14 @@ tkLabel.pack()
 
 
 varLabel2 = tkinter.StringVar()
+varLabel2.set(" \n")
 tkLabel2 = tkinter.Label(textvariable=varLabel2, )
 tkLabel2.pack()
 
 button1 = tkinter.IntVar()
+btn_text = tkinter.StringVar()
 button1state = tkinter.Button(tkTop,    
-    text="Calibrate pedals",
+    textvariable=btn_text,
     command=set_button1_state,
     height = 4,
     fg = "black",
@@ -71,18 +74,21 @@ button1state = tkinter.Button(tkTop,
     bd = 5,
     activebackground='green'
 )
+btn_text.set("Calibrate")
 button1state.pack(side='top', ipadx=40, padx=10, pady=15)
 
-button2 = tkinter.IntVar()
-button2state = tkinter.Button(tkTop,
-    text="Calibrate Fanatec shifter",
-    command=set_button2_state,
-    height = 4,
-    fg = "black",
-    width = 8,
-    bd = 5
-)
-button2state.pack(side='top', ipadx=40, padx=10, pady=15)
+# button2 = tkinter.IntVar()
+# button2state = tkinter.Button(tkTop,
+#     text="Calibrate Fanatec shifter",
+#     command=set_button2_state,
+#     height = 4,
+#     fg = "black",
+#     width = 8,
+#     bd = 5
+# )
+# button2state.pack(side='top', ipadx=40, padx=10, pady=15)
+
+
 
 tkButtonQuit = tkinter.Button(
     tkTop,
@@ -94,5 +100,6 @@ tkButtonQuit = tkinter.Button(
     bg = 'yellow',
     bd = 5
 )
-tkButtonQuit.pack(side='top', ipadx=40, padx=10, pady=15)
+tkButtonQuit.pack(side='bottom', ipadx=40, padx=10, pady=15)
+
 tkinter.mainloop()
